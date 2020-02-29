@@ -2,7 +2,7 @@
 
 static t_flag	init_flag()
 {
-	t_flag	ret;
+	t_flag ret;
 
 	ret.h = 0;
 	ret.v = 0;
@@ -15,7 +15,5 @@ t_flag 	fill_flag(int ac, char **av)
 	int		i;
 
 	ret = init_flag();
-	i = 0;
-	ft_putchar('c');
 	return ret;
 }

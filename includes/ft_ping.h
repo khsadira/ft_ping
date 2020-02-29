@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "../libft/includes/libft.h"
+
 typedef struct	s_flag {
 	int h;
 	int v;

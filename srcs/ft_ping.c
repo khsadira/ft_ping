@@ -1,14 +1,8 @@
 #include "ft_ping.h"
 
-int ft_ping(int ac, char **av)
+int ft_ping(char *ip, t_flag flag)
 {
-	t_flag	flag;
-	char 	*ip;
-	int 	i;
+	int fd = socket(ip, SOCK_STREAM, PF_INET)
 
-	if ((i = fill_flag(ac, av, &flag)) == -1)
-		return 1;
-
-	printf("arg = %s\nh = %d\nv = %d\n", av[i], flag.h, flag.v);
 	return 0;
 }

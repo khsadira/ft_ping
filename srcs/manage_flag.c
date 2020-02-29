@@ -49,13 +49,8 @@ int		fill_flag(int ac, char **av, t_flag *flag)
 		else if (!ft_strnequ(av[i], "-", 1))
 			return i;
 		if (check_flag(av[i], flag))
-		{
-			print_usage();
 			return -1;
-		}
 		i++;
 	}
-	print_usage();
 	return -1;
-
 }

@@ -2,6 +2,14 @@
 
 int main(int ac, char **av)
 {
-	ft_ping(ac, av);
-	return 0;
+	t_flag	flag;
+	int 	i;
+
+	if ((i = fill_flag(ac, av, &flag)) == -1 || !av[i])
+	{
+		print_usage();
+		return 1;
+	}
+
+	return ft_ping(av[i], flag);
 }

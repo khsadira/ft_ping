@@ -8,6 +8,7 @@
 typedef struct	s_flag {
 	int h;
 	int v;
+	int e;
 }				t_flag;
 
 int ft_ping(int ac, char **av);

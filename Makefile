@@ -29,7 +29,7 @@ OBJS		=		$(addprefix $(OBJ_PATH)/, $(OBJ_FILES))
 
 all: $(OBJS) | $(OBJ_PATH)
 	make -C libft
-	$(CC) $(INC) -o $(NAME) $(OBJS) $(LLIBFT)
+	$(CC) $(CFLAGS) $(INC) -o $(NAME) $(OBJS) $(LLIBFT)
 
 $(OBJ_PATH)/%.o : $(SRC_PATH)/%.c | $(OBJ_PATH)
 	$(CC) $(INC) -o $@ -c $<

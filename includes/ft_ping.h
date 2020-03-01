@@ -11,6 +11,8 @@
 
 #include <netdb.h>
 #include <netinet/in.h>
+#include <netinet/ip.h>
+#include <netinet/ip_icmp.h>
 #include <arpa/inet.h>
 
 #include "../libft/includes/libft.h"
@@ -55,6 +57,7 @@ typedef struct	s_stock {
 	int			pck_send;
 	int 		pck_receve;
 	int 		seq;
+	int 		df_flag;
 }				t_stock;
 
 t_stock 	g_stock;

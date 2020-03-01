@@ -1,28 +1,22 @@
 #include "ft_ping.h"
 
-int pingloop = 1;
 
-static char *get_dns(char *hostname, t_sockaddr_in *sa_in)
+static char *get_dns(t_sockaddr_in *sa_in)
 {
-	t_addrinfo	hints, *res;
+	t_addrinfo		hints;
+	t_addrinfo		*res;
 	char 			*ip_share;
-
 
 	memset(&hints, 0, sizeof(t_addrinfo));
 	hints.ai_family = AF_INET;
-//	hints.ai_socktype = SOCK_STREAM;
-//	hints.ai_flags = AI_PASSIVE;
-//	hints.ai_protocol = 0;
-//	hints.ai_canonname = NULL;
-//	hints.ai_next = NULL;
 
-	if ((ip_share = malloc(INET_ADDRSTRLEN)) < 0)
+	if (!(ip_share = malloc(INET_ADDRSTRLEN)))
 	{
 		fprintf(stderr, "malloc: ...\n");
 		return NULL;
 	}
 
-	if (getaddrinfo(hostname, NULL, &hints, &(res)) < 0 || !res)
+	if (getaddrinfo(g_stock.hostname_dst, NULL, &hints, &res) != 0 || !res)
 	{
 		fprintf(stderr, "getaddrinfo: ...\n");
 		return NULL;
@@ -34,53 +28,58 @@ static char *get_dns(char *hostname, t_sockaddr_in *sa_in)
 	return (ip_share);
 }
 
-
-static void	send_ping(int sock_fd, char *ip_addr, char *hostname, t_sockaddr_in sockaddr_in)
+static int	open_socket()
 {
+	int hincl;
 
-	int ttl_val=64;
-	int flag;
-	struct timeval tv_out;
+	hincl = 1;
 
-	printf("%d\n",setsockopt(sock_fd, IPPROTO_IP, IP_HDRINCL, &ttl_val, sizeof(ttl_val)));
-//	if (!setsockopt(sock_fd, IPPROTO_IP, IP_HDRINCL, &ttl_val, sizeof(ttl_val)))
-//	{
-//		fprintf(stderr, "setsockopt: Setting socket options to TTL failed\n");
-//		return;
-//	}
+	ft_memset(&(g_stock.hints), 0, sizeof(g_stock.hints));
+	g_stock.hints.ai_family = AF_INET;
+	g_stock.hints.ai_socktype = SOCK_RAW;
+	g_stock.hints.ai_protocol = IPPROTO_ICMP;
 
-	printf("%d\n", setsockopt(sock_fd, SOL_SOCKET, SO_RCVTIMEO, &tv_out, sizeof(tv_out)));
-	while (pingloop)
+	if (getaddrinfo(g_stock.host_dst, NULL, &(g_stock.hints), &(g_stock.res)) < 0)
 	{
-		flag = 1;
+		fprintf(stderr, "getaddrinfo: ...");
+		return -1;
 	}
+
+	printf("%d|%d|%d\n", g_stock.res->ai_family, g_stock.res->ai_socktype, g_stock.res->ai_protocol);
+	if ((g_stock.sock_fd = socket(g_stock.res->ai_family, g_stock.res->ai_socktype, g_stock.res->ai_protocol)) < 0)
+	{
+		fprintf(stderr, "socket: Could not get fd: %d\n", g_stock.sock_fd);
+		return -1;
+	}
+
+	if (setsockopt(g_stock.sock_fd, IPPROTO_IP, IP_HDRINCL, &hincl, sizeof(hincl)) < 0)
+	{
+		fprintf(stderr, "setsockopt: ...");
+		return -1;
+	}
+
+	return (g_stock.sock_fd);
 }
+
 
 static void intHandler()
 {
-	pingloop=0;
+	g_stock.ping_loop = 0;
 }
 
-int ft_ping(char *hostname, t_flag flag)
+int ft_ping()
 {
-	char 			*ip_addr;
-	int 			sock_fd;
 	t_sockaddr_in	sockaddr_in;
 
-	if (!(ip_addr = get_dns(hostname, &sockaddr_in)))
+	g_stock.host_src = "0.0.0.0";
+	if (!(g_stock.host_dst = get_dns(&sockaddr_in)))
 	{
 		fprintf(stderr, "DNS Lookup failed: Could not resolve hostname\n");
 		return 1;
 	}
-	printf("%s\n", ip_addr);
 
-	if (!(sock_fd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)))
-	{
-		fprintf(stderr, "socket: File descriptor corrupted\n");
-		return 1;
-	}
-
+	open_socket();
 	signal(SIGINT, intHandler);
-	send_ping(sock_fd, ip_addr, hostname, sockaddr_in);
-	return 0;
+
+	return ping_loop();
 }

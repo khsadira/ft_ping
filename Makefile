@@ -15,7 +15,8 @@ SRC_PATH	=		./srcs
 
 SRC_FILES	=		main.c\
 					ft_ping.c\
-					manage_flag.c
+					manage_flag.c\
+					manage_ping.c
 
 
 OBJ_PATH	=		./objs

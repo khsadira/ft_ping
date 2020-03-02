@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <signal.h>
+
 #include <sys/socket.h>
 #include <sys/time.h>
 #include <sys/types.h>

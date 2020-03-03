@@ -68,6 +68,8 @@ int		ft_ping();
 int		fill_flag(int ac, char **av, t_flag *flag);
 char	*get_ip(int ac, char **av);
 void	print_usage();
+void 	pck_send_configuration();
 int		ping_loop();
+unsigned short	icmp_checksum(unsigned short *data, int len);
 
 #endif

@@ -1,9 +1,5 @@
 #include "ft_ping.h"
 
-void	print_usage()
-{
-	printf("ping usage = ...\n");
-}
 
 static t_flag	init_flag()
 {

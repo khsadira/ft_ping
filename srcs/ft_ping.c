@@ -58,7 +58,7 @@ static int	open_socket()
 		return -1;
 	}
 
-	return (g_stock.sock_fd);
+	return (0);
 }
 
 
@@ -78,7 +78,8 @@ int ft_ping()
 		return 1;
 	}
 
-	open_socket();
+	if (open_socket() == -1)
+		return 1;
 	signal(SIGINT, intHandler);
 
 	return ping_loop();

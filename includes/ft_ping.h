@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <float.h>
 
 #include <signal.h>
 
@@ -24,6 +25,8 @@
 #define t_timeval		struct timeval
 #define t_ip			struct ip
 #define t_icmp			struct icmp
+#define t_iovec			struct iovec
+#define t_msghdr		struct msghdr
 
 typedef struct	s_flag {
 	int h;
@@ -47,6 +50,11 @@ typedef struct	s_stock {
 
 	t_flag		opts;
 
+	t_iovec		iov[1];
+	t_msghdr	msg;
+	char		buf_control[1000];
+
+
 	int 		sock_fd;
 	int 		ping_loop;
 	int 		flags;
@@ -57,7 +65,7 @@ typedef struct	s_stock {
 	double		min;
 
 	int			pck_send;
-	int 		pck_receve;
+	int 		pck_receive;
 	int 		seq;
 	int 		df_flag;
 }				t_stock;
@@ -69,6 +77,7 @@ int		fill_flag(int ac, char **av, t_flag *flag);
 char	*get_ip(int ac, char **av);
 void	print_usage();
 void 	pck_send_configuration();
+void	pck_configure_receive();
 int		ping_loop();
 unsigned short	icmp_checksum(unsigned short *data, int len);
 

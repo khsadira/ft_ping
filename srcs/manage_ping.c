@@ -20,27 +20,38 @@ unsigned short	icmp_checksum(unsigned short *data, int len)
 static void	header_configuration()
 {
 	g_stock.ip = (t_ip *)g_stock.buf;
-	g_stock.icmp = (t_icmp *)(&(g_stock.ip) + 1);
+	g_stock.icmp = (t_icmp *)(g_stock.ip + 1);
 }
-
 
 int 	ping_loop()
 {
-	int		flag;
-	int 	nb_send;
+	int 		nb_send;
+	t_timeval	tv_start;
+	t_timeval	tv_end;
 
 	header_configuration();
-	g_stock.ping_loop = 1;
-	g_stock.count = 0;
+
+	g_stock.pck_send = 0;
+	g_stock.pck_receive = 0;
+	g_stock.seq = 0;
 
 	while (g_stock.ping_loop)
 	{
-		flag = 1;
+
 		printf("On send\n");
 		pck_send_configuration();
-		printf("on recoit\n");
-		g_stock.count++;
+		gettimeofday(&tv_start, NULL);
+
+		if ((nb_send = sendto(g_stock.sock_fd, g_stock.buf, sizeof(g_stock.buf), 0, g_stock.res->ai_addr, g_stock.res->ai_addrlen)) < 0)
+		{
+			fprintf(stderr, "ping_loop: sendto error: %d\n", nb_send);
+			return 1;
+		}
+		if (nb_send >= 0)
+			g_stock.pck_send++;
+
 		sleep(3);
+
 	}
 	printf("\nc'est la fin: %d\n", g_stock.count);
 	return 0;

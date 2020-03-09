@@ -27,7 +27,7 @@ int main(int ac, char **av)
 	g_stock.host_src = "0.0.0.0";
 	g_stock.min = DBL_MAX;
 	g_stock.pid = getpid();
-	g_stock.ip = malloc(sizeof(t_ip) * 1);
+	//g_stock.ip = malloc(sizeof(t_ip) * 1);
 
 	return ft_ping();
 }

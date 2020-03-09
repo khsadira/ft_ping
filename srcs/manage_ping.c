@@ -35,18 +35,26 @@ int 	ping_loop()
 	g_stock.pck_receive = 0;
 	g_stock.seq = 0;
 
+	printf("%s:%s:%s\n", g_stock.host_src, g_stock.hostname_dst, g_stock.host_dst);
+
 	while (g_stock.ping_loop)
 	{
 
 		printf("On send\n");
 		pck_send_configuration();
+		printf("src: %d\ndst: %d\n", g_stock.ip->ip_src.s_addr, g_stock.ip->ip_dst.s_addr);
 		gettimeofday(&tv_start, NULL);
+
+		printf("%ld\n", tv_start.tv_sec);
+		printf("%d|%d|%d|%s|%d\n", g_stock.sock_fd, g_stock.res->ai_addr->sa_len, g_stock.res->ai_addr->sa_family, g_stock.res->ai_addr->sa_data, g_stock.res->ai_addrlen);
 
 		if ((nb_send = sendto(g_stock.sock_fd, g_stock.buf, sizeof(g_stock.buf), 0, g_stock.res->ai_addr, g_stock.res->ai_addrlen)) < 0)
 		{
+			perror("sendto:");
 			fprintf(stderr, "ping_loop: sendto error: %d\n", nb_send);
 			return 1;
 		}
+
 		if (nb_send >= 0)
 			g_stock.pck_send++;
 

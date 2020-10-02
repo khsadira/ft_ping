@@ -1,5 +1,5 @@
 #include "ft_ping.h"
-
+#include <errno.h>
 
 static char *get_dns(t_sockaddr_in *sa_in)
 {
@@ -12,13 +12,13 @@ static char *get_dns(t_sockaddr_in *sa_in)
 
 	if (!(ip_share = malloc(INET_ADDRSTRLEN)))
 	{
-		fprintf(stderr, "malloc: ...\n");
+		fprintf(stderr, "malloc: Error to allowed memory.\n");
 		return NULL;
 	}
 
 	if (getaddrinfo(g_stock.hostname_dst, NULL, &hints, &res) != 0 || !res)
 	{
-		fprintf(stderr, "getaddrinfo: ...\n");
+		fprintf(stderr, "getaddrinfo: Unknown host\n");
 		return NULL;
 	}
 
@@ -41,7 +41,7 @@ static int	open_socket()
 
 	if (getaddrinfo(g_stock.host_dst, NULL, &(g_stock.hints), &(g_stock.res)) < 0)
 	{
-		fprintf(stderr, "getaddrinfo: ...");
+		fprintf(stderr, "getaddrinfo: Unknown host\n");
 		return -1;
 	}
 
@@ -52,11 +52,21 @@ static int	open_socket()
 		return -1;
 	}
 
-	if (setsockopt(g_stock.sock_fd, IPPROTO_IP, IP_HDRINCL, &hincl, sizeof(hincl)) < 0)
-	{
-		fprintf(stderr, "setsockopt: ...");
-		return -1;
-	}
+	// if ((setsockopt(g_stock.sock_fd, SOL_SOCKET, SO_BROADCAST, &hincl, sizeof(hincl))) < 0)
+	// {
+	// 	// fprintf(stderr, "setsockopt: ...");
+	// 	perror("open_socket: setsockopt");
+	// 	return -1;
+	// }
+
+	// if (setsockopt(g_stock.sock_fd, IPPROTO_ICMP, IP_HDRINCL, &hincl, sizeof(hincl)) < 0)
+	// {
+	// 	// fprintf(stderr, "setsockopt: ...");
+	// 	perror("open_socket: setsockopt");
+	// 	fprintf(stderr, "Value of errno: %d\n", errno);
+
+	// 	return -1;
+	// }
 
 	return (0);
 }
@@ -71,7 +81,6 @@ int ft_ping()
 {
 	t_sockaddr_in	sockaddr_in;
 
-	g_stock.host_src = "0.0.0.0";
 	if (!(g_stock.host_dst = get_dns(&sockaddr_in)))
 	{
 		fprintf(stderr, "DNS Lookup failed: Could not resolve hostname\n");

@@ -27,6 +27,12 @@
 #define t_icmp			struct icmp
 #define t_iovec			struct iovec
 #define t_msghdr		struct msghdr
+#define PACKETSIZE  64
+
+typedef struct	s_packet {
+    struct icmphdr	hdr;
+    char			msg[PACKETSIZE - sizeof(struct icmphdr)];
+}				t_packet;
 
 typedef struct	s_flag {
 	int h;
@@ -40,6 +46,7 @@ typedef struct	s_stock {
 
 	pid_t 		pid;
 
+	t_packet	pck;
 	char		buf[76];
 	char 		*hostname_dst;
 	char 		*host_dst;

@@ -89,6 +89,7 @@ int ft_ping()
 
 	if (open_socket() == -1)
 		return 1;
+
 	signal(SIGINT, intHandler);
 
 	return ping_loop();

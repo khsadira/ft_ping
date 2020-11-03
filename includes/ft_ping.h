@@ -63,7 +63,7 @@ typedef struct	s_flag {
 	int v;
 }				t_flag;
 
-typedef struct	s_stock {
+typedef struct	s_env {
 
 	t_addrinfo	hints;
 	t_addrinfo	*res;
@@ -100,9 +100,9 @@ typedef struct	s_stock {
 	int 		pck_receive;
 	int 		seq;
 	int 		df_flag;
-}				t_stock;
+}				t_env;
 
-t_stock 	g_stock;
+t_env 	env;
 
 char 			*get_dns();
 void 			display_info();

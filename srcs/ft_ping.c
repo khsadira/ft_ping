@@ -17,7 +17,7 @@ char *get_dns()
 		return NULL;
 	}
 
-	if (getaddrinfo(g_stock.hostname_dst, NULL, &hints, &res) < 0)
+	if (getaddrinfo(env.hostname_dst, NULL, &hints, &res) < 0)
 	{
 		fprintf(stderr, "getaddrinfo: Unknown host\n");
 		return NULL;
@@ -31,12 +31,12 @@ char *get_dns()
 
 static void intHandler()
 {
-	g_stock.ping_loop = 0;
+	env.ping_loop = 0;
 }
 
 int ft_ping()
 {
-	if (!(g_stock.host_dst = get_dns()))
+	if (!(env.host_dst = get_dns()))
 	{
 		fprintf(stderr, "DNS Lookup failed: Could not resolve hostname\n");
 		return 1;

@@ -21,8 +21,13 @@ void		manage_ping_receive(struct timeval tv_start, struct timeval tv_end)
 
 	duration = 0;
 	nb_receive = 0;
-	pck_receive_configuration();	
-	nb_receive = recvmsg(env.sock_fd, &(env.msg), MSG_DONTWAIT);
+	// pck_receive_configuration();
+	if ((nb_receive = recvmsg(env.sock_fd, &(env.msg), MSG_DONTWAIT)) <= 0) {
+		perror("recvmsg");
+		fprintf(stderr, "recvmsg: Packet receive failed\n");
+	} else {
+		env.pck_receive++;
+	}
 	gettimeofday(&tv_end, NULL);
 	if (env.icmp->icmp_hun.ih_idseq.icd_id == env.pid)
 	{

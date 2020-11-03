@@ -1,11 +1,5 @@
 #include "ft_ping.h"
 
-void	header_configuration()
-{
-	env.ip = (t_ip *)(env.buf);
-	env.icmp = (t_icmp *)(env.ip + 1);
-}
-
 void	pck_send_configuration() {
 	ft_memset(&(env.buf), 0, sizeof(env.buf));
 	env.ip->ip_v = 4;
@@ -26,31 +20,4 @@ void	pck_send_configuration() {
 	env.icmp->icmp_hun.ih_idseq.icd_id = env.pid;
 	env.icmp->icmp_hun.ih_idseq.icd_seq = env.seq;
 	env.icmp->icmp_cksum = icmp_checksum((unsigned short *) (env.icmp), sizeof(env.icmp));
-}
-
-int		open_socket()
-{
-	int hincl;
-
-	hincl = 1;
-	ft_memset(&(env.hints), 0, sizeof(env.hints));
-	env.hints.ai_family = AF_INET;
-	env.hints.ai_socktype = SOCK_RAW;
-	env.hints.ai_protocol = IPPROTO_ICMP;
-	if (getaddrinfo(env.host_dst, NULL, &(env.hints), &(env.res)) < 0)
-	{
-		printf("ping: unknown host\n");
-		exit(EXIT_FAILURE);
-	}
-	if ((env.sock_fd = socket(env.res->ai_family, env.res->ai_socktype, env.res->ai_protocol)) < 0)
-	{
-		printf("Error socket opening\n");
-		exit(EXIT_FAILURE);
-	}
-	// if (setsockopt(env.sock_fd, IPPROTO_IP, IP_HDRINCL, &hincl, sizeof(hincl)) < 0)
-	// {
-	// 	printf("Error setsocket\n");
-	// 	exit(EXIT_FAILURE);
-	// }
-	return (env.sock_fd);
 }

@@ -15,7 +15,7 @@ int main(int ac, char **av)
 	}
 
 	env.ping_loop = 1;
-	env.flags = 0;
+	env.flag = 0;
 	env.count = 0;
 	env.interval = 1;
 	env.timeout = 1;

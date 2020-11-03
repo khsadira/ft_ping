@@ -19,7 +19,8 @@ SRC_FILES	=		main.c\
 					manage_ping.c\
 					manage_print.c\
 					manage_send.c\
-					manage_receive.c
+					manage_receive.c\
+					ping_helper.c
 
 
 OBJ_PATH	=		./objs

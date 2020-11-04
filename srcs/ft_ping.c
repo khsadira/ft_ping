@@ -1,22 +1,28 @@
 #include "ft_ping.h"
 #include <errno.h>
 
-static void intHandler()
+void			sig_handler(int sig)
 {
-	env.ping_loop = 0;
+	if (sig == SIGINT)
+	{
+		env.ping_loop = 0;
+		print_stats();
+		free_env();
+		exit(EXIT_SUCCESS);
+	}
+	if (sig == SIGALRM)
+		env.timeout_flag = TRUE;
 }
 
 int ft_ping()
 {
 	if (!(env.host_dst = get_dns()))
-	{
-		fprintf(stderr, "DNS Lookup failed: Could not resolve hostname\n");
-		return 1;
-	}
+		ft_error("DNS Lookup failed: Could not resolve hostname\n");
 	if (open_socket() == -1)
-		return 1;
+		ft_error("Failed to open a socket\n");
 	header_configuration();
 	pck_send_configuration();
-	signal(SIGINT, intHandler);
+	signal(SIGALRM, sig_handler);
+	signal(SIGINT, sig_handler);
 	return ping_loop();
 }

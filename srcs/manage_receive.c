@@ -14,23 +14,40 @@ static void	pck_receive_configuration()
 	env.msg.msg_flags = 0;
 }
 
+static t_bool	check_timeout(int nb_recv)
+{
+	if (nb_recv == -1)
+	{
+		printf("Request timeout for icmp_seq %d\n", env.seq);
+		alarm(0);
+		env.timeout_flag = FALSE;
+		env.seq++;
+		return (FALSE);
+	}
+	return (TRUE);
+}
+
 t_bool		manage_ping_receive(struct timeval tv_start, struct timeval tv_end)
 {
 	double	duration = 0;
 	int		nb_receive = 0;
 
 	pck_receive_configuration();
-	nb_receive = recvmsg(env.sock_fd, &(env.msg), MSG_DONTWAIT);
+	nb_receive = recvmsg(env.sock_fd, &(env.msg), MSG_WAITALL);
 	gettimeofday(&tv_end, NULL);
-	if (env.icmp->icmp_hun.ih_idseq.icd_id == env.pid)
+	my_sleep(1);
+	if (!check_timeout(nb_receive)) {
+		return (TRUE);
+	}
+	else if (env.icmp->icmp_hun.ih_idseq.icd_id == env.pid)
 	{
 		env.pck_receive++;
 		duration = (((double)tv_end.tv_sec * 1000000.0 + tv_end.tv_usec) - ((double)tv_start.tv_sec * 1000000.0 + tv_start.tv_usec)) / 1000;
 		add_duration_stats(duration);
 		print_resp(nb_receive, duration);
-		env.timeout = FALSE;
+		alarm(0);
+		env.timeout_flag = FALSE;
 		env.seq++;
-		sleep(1);
 		return (TRUE);
 	}
 	return (FALSE);

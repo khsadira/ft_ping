@@ -39,11 +39,16 @@ void	print_stats()
 		variant = env.t_aggregate_s / env.pck_send - avg * avg;
 	if (env.pck_receive > 0)
 		printf("round-trip min/avg/max/stddev = %.3f/%.3f/%.3f/%.3f ms\n", env.t_min, avg, env.t_max, sqrt(variant));
-	exit(0);
+}
+
+void	print_timeout()
+{
+	printf("Request timeout for icmp_seq %d\n", env.seq);
 }
 
 void	ft_error(char *str)
 {
 	fprintf(stderr, "%s\n", str);
+	free_env();
 	exit(EXIT_FAILURE);
 }

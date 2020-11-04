@@ -20,7 +20,8 @@ SRC_FILES	=		main.c\
 					manage_print.c\
 					manage_send.c\
 					manage_receive.c\
-					ping_helper.c
+					ping_helper.c\
+					manage_free.c
 
 
 OBJ_PATH	=		./objs

@@ -96,6 +96,7 @@ typedef struct	s_env {
 	char		buf_control[1000];
 
 
+	t_bool			timeout_flag;
 	int 		sock_fd;
 	int 		ping_loop;
 	int 		flag;
@@ -134,6 +135,8 @@ void			print_resp(int nb_receive, double duration);
 unsigned short	checksum(void *b, int len);
 void			add_duration_stats(double duration);
 void			print_stats();
-
+void			print_timeout();
+void			my_sleep(int time);
+void			free_env();
 
 #endif

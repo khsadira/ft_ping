@@ -1,7 +1,7 @@
 #include "ft_ping.h"
 
 static t_bool	is_finish() {
-	if ((env.seq == env.count && env.count != 0) || !env.ping_loop)
+	if ((env.seq == env.count && env.count != 0))
 		return (FALSE);
 	return (TRUE);
 }
@@ -44,16 +44,19 @@ int 			ping_loop()
 
 		gettimeofday(&tv_start, NULL);
 
-		if (sendto(env.sock_fd, &env.pck, sizeof(env.pck), 0, env.res->ai_addr, env.res->ai_addrlen) < 0) {
-			ft_error("sendto: Packet sending failed\n");
+		if ((nb_send = sendto(env.sock_fd, &env.pck, sizeof(env.pck), 0, env.res->ai_addr, env.res->ai_addrlen)) < 0) {
+			fprintf(stderr, "sendto: Packet sending failed.\n");
+			my_sleep(1);
+			continue;
 		}
 
 		env.pck_send++;
 		env.r_addr_len = sizeof(env.r_addr);
-
+		alarm(env.timeout);
 		while (!manage_ping_receive(tv_start, tv_end))
 			;
 	}
 	print_stats();
+	free_env();
 	return 0;
 }

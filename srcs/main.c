@@ -22,9 +22,12 @@ int main(int ac, char **av)
 	env.ttl = 116;
 	env.hostname_dst = av[i];
 	env.host_src = "0.0.0.0";
-	env.min = DBL_MAX;	
+	env.t_min = DBL_MAX;
+	env.t_max = 0;
+	env.t_aggregate = 0;
+	env.t_aggregate_s = 0;	
 	env.pid = getpid();
-	// env.ip = malloc(sizeof(t_ip) * 1);
+	env.ip = malloc(sizeof(t_ip) * 1);
 
 	return (ft_ping());
 }

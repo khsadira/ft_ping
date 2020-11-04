@@ -11,10 +11,10 @@ void	pck_send_configuration() {
 	env.ip->ip_ttl = env.ttl;
 	env.ip->ip_p = env.res->ai_protocol;
 	env.ip->ip_sum = 0;
-	if (inet_pton(env.res->ai_family, env.host_src, &(env.ip->ip_src.s_addr)) < 0 || inet_pton(env.res->ai_family, env.host_dst, &(env.ip->ip_dst.s_addr)) < 0) {
-		fprintf(stderr, "pck_send_configuration: inet_pton failed\n");
-		exit(EXIT_FAILURE);
-	}
+	
+	if (inet_pton(env.res->ai_family, env.host_src, &(env.ip->ip_src.s_addr)) < 0 || inet_pton(env.res->ai_family, env.host_dst, &(env.ip->ip_dst.s_addr)) < 0) 
+		ft_error("pck_send_configuration: inet_pton failed\n");
+
 	env.icmp->icmp_type = ICMP_ECHO;
 	env.icmp->icmp_code = 0;
 	env.icmp->icmp_hun.ih_idseq.icd_id = env.pid;

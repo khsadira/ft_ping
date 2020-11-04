@@ -15,7 +15,8 @@ int ft_ping()
 	}
 	if (open_socket() == -1)
 		return 1;
-	// header_configuration();
+	header_configuration();
+	pck_send_configuration();
 	signal(SIGINT, intHandler);
 	return ping_loop();
 }

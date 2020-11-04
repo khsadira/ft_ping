@@ -14,27 +14,24 @@ static void	pck_receive_configuration()
 	env.msg.msg_flags = 0;
 }
 
-void		manage_ping_receive(struct timeval tv_start, struct timeval tv_end)
+t_bool		manage_ping_receive(struct timeval tv_start, struct timeval tv_end)
 {
-	double	duration;
-	int		nb_receive;
+	double	duration = 0;
+	int		nb_receive = 0;
 
-	duration = 0;
-	nb_receive = 0;
-	// pck_receive_configuration();
-	if ((nb_receive = recvmsg(env.sock_fd, &(env.msg), MSG_DONTWAIT)) <= 0) {
-		perror("recvmsg");
-		fprintf(stderr, "recvmsg: Packet receive failed\n");
-	} else {
-		env.pck_receive++;
-	}
+	pck_receive_configuration();
+	nb_receive = recvmsg(env.sock_fd, &(env.msg), MSG_DONTWAIT);
 	gettimeofday(&tv_end, NULL);
 	if (env.icmp->icmp_hun.ih_idseq.icd_id == env.pid)
 	{
+		env.pck_receive++;
 		duration = (((double)tv_end.tv_sec * 1000000.0 + tv_end.tv_usec) - ((double)tv_start.tv_sec * 1000000.0 + tv_start.tv_usec)) / 1000;
+		add_duration_stats(duration);
 		print_resp(nb_receive, duration);
-		alarm(0);
 		env.timeout = FALSE;
 		env.seq++;
+		sleep(1);
+		return (TRUE);
 	}
+	return (FALSE);
 }

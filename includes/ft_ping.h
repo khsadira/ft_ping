@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <float.h>
+# include <math.h>
 
 #include <signal.h>
 
@@ -102,7 +103,11 @@ typedef struct	s_env {
 	int 		timeout;
 	int 		interval;
 	int 		ttl;
-	double		min;
+
+	double		t_min;
+	double		t_max;
+	double		t_aggregate;
+	double		t_aggregate_s;
 
 	int			pck_send;
 	int 		pck_receive;
@@ -112,8 +117,9 @@ typedef struct	s_env {
 
 t_env 	env;
 
+void			ft_error(char *str);
 char 			*get_dns();
-void 			display_info();
+void 			print_info();
 void			header_configuration();
 int				open_socket();
 int				ft_ping();
@@ -123,8 +129,11 @@ void			print_usage();
 void 			pck_send_configuration();
 int				ping_loop();
 unsigned short	icmp_checksum(unsigned short *data, int len);
-void			manage_ping_receive(struct timeval tv_start, struct timeval tv_end);
+t_bool			manage_ping_receive(struct timeval tv_start, struct timeval tv_end);
 void			print_resp(int nb_receive, double duration);
 unsigned short	checksum(void *b, int len);
+void			add_duration_stats(double duration);
+void			print_stats();
+
 
 #endif

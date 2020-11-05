@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <float.h>
-# include <math.h>
+#include <math.h>
 
 #include <signal.h>
 
@@ -39,25 +39,25 @@
 
 typedef unsigned char	t_bool;
 
-struct icmphdr
-{
-  u_int8_t type;		/* message type */
-  u_int8_t code;		/* type sub-code */
-  u_int16_t checksum;
-  union
-  {
-    struct
-    {
-      u_int16_t	id;
-      u_int16_t	sequence;
-    } echo;			/* echo datagram */
-    u_int32_t	gateway;	/* gateway address */
-    struct
-    {
-      u_int16_t	mtu;
-    } frag;			/* path mtu discovery */
-  } un;
-};
+// struct icmphdr
+// {
+//   u_int8_t type;		/* message type */
+//   u_int8_t code;		/* type sub-code */
+//   u_int16_t checksum;
+//   union
+//   {
+//     struct
+//     {
+//       u_int16_t	id;
+//       u_int16_t	sequence;
+//     } echo;			/* echo datagram */
+//     u_int32_t	gateway;	/* gateway address */
+//     struct
+//     {
+//       u_int16_t	mtu;
+//     } frag;			/* path mtu discovery */
+//   } un;
+// };
 
 typedef struct	s_packet {
     struct icmphdr	hdr;
@@ -65,8 +65,9 @@ typedef struct	s_packet {
 }				t_packet;
 
 typedef struct	s_flag {
-	int h;
-	int v;
+	int	d;
+	int	h;
+	int	v;
 }				t_flag;
 
 typedef struct	s_env {
@@ -89,17 +90,16 @@ typedef struct	s_env {
 	t_ip		*ip;
 	t_icmp		*icmp;
 
-	t_flag		opts;
+	t_flag		flags;
 
 	t_iovec		iov[1];
 	t_msghdr	msg;
 	char		buf_control[1000];
 
 
-	t_bool			timeout_flag;
+	t_bool		timeout_flag;
 	int 		sock_fd;
 	int 		ping_loop;
-	int 		flag;
 	int			count;
 	int 		timeout;
 	int 		interval;

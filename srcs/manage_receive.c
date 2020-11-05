@@ -16,8 +16,7 @@ static void	pck_receive_configuration()
 
 static t_bool	check_timeout(int nb_recv)
 {
-	if (nb_recv == -1)
-	{
+	if (env.timeout_flag == TRUE) {
 		printf("Request timeout for icmp_seq %d\n", env.seq);
 		alarm(0);
 		env.timeout_flag = FALSE;
@@ -33,11 +32,10 @@ t_bool		manage_ping_receive(struct timeval tv_start, struct timeval tv_end)
 	int		nb_receive = 0;
 
 	pck_receive_configuration();
-	nb_receive = recvmsg(env.sock_fd, &(env.msg), MSG_WAITALL);
+	nb_receive = recvmsg(env.sock_fd, &(env.msg), MSG_DONTWAIT);
 	gettimeofday(&tv_end, NULL);
-	my_sleep(1);
-	if (!check_timeout(nb_receive)) {
-		return (TRUE);
+	if (check_timeout(nb_receive) == FALSE) {
+		return (FALSE);
 	}
 	else if (env.icmp->icmp_hun.ih_idseq.icd_id == env.pid)
 	{
@@ -48,7 +46,7 @@ t_bool		manage_ping_receive(struct timeval tv_start, struct timeval tv_end)
 		alarm(0);
 		env.timeout_flag = FALSE;
 		env.seq++;
-		return (TRUE);
+		return (FALSE);
 	}
-	return (FALSE);
+	return (TRUE);
 }

@@ -4,7 +4,15 @@ int main(int ac, char **av)
 {
 	int 		i;
 
-	if ((i = fill_flag(ac, av, &(env.opts))) == -1 || !av[i]) {
+	env.flags.h = 0;
+	env.flags.v = 0;
+	env.flags.d = 0;
+	env.count = 0; // TO FLAG -c
+	env.interval = 1; // TO FLAG -i
+	env.timeout = 1; // TO FLAG -W
+	env.ttl = 116; // TO FLAG -m
+
+	if ((i = fill_flag(ac, av, &(env.flags))) == -1 || !av[i]) {
 		print_usage();
 		return 1;
 	}
@@ -15,11 +23,6 @@ int main(int ac, char **av)
 	}
 
 	env.ping_loop = 1;
-	env.flag = 0;
-	env.count = 0;
-	env.interval = 1;
-	env.timeout = 1;
-	env.ttl = 116;
 	env.hostname_dst = av[i];
 	env.host_src = "0.0.0.0";
 	env.host_dst = NULL;
@@ -29,7 +32,8 @@ int main(int ac, char **av)
 	env.t_aggregate_s = 0;	
 	env.pid = getpid();
 	env.res = NULL;
-	// env.ip = malloc(sizeof(t_ip) * 1);
+
+
 
 	return (ft_ping());
 }

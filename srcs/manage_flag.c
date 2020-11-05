@@ -24,6 +24,8 @@ static int check_flag(char *s, t_flag *flag)
 			flag->h = 1;
 		else if (s[i] == 'v')
 			flag->v = 1;
+		else if (s[i] == 'd')
+			flag->d = 1;
 		else
 			return -1;
 		i++;

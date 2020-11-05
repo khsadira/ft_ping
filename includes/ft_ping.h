@@ -75,9 +75,6 @@ typedef struct	s_env {
 	t_addrinfo	hints;
 	t_addrinfo	*res;
 
-	t_sockaddr_in	r_addr;
-	int			r_addr_len;
-
 	pid_t 		pid;
 
 	t_packet	pck;

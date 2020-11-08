@@ -29,19 +29,11 @@
 // }
 
 void pck_send_configuration() {
-	int	i = 0;
 
 	ft_bzero(&(env.pck), sizeof(env.pck));
+	ft_bzero(&(env.pck.msg), sizeof(env.pck.msg));
 	env.pck.hdr.type = ICMP_ECHO;
 	env.pck.hdr.un.echo.id = env.pid;
-
-
-	// ft_memset(&(env.pck.msg), 0, sizeof(env.pck.msg));
-	while (i < sizeof(env.pck.msg)) {
-		env.pck.msg[i] = i+'0';
-		i++;
-	}
-	env.pck.msg[i] = '\0';
 	env.pck.hdr.un.echo.sequence = env.seq;
 	env.pck.hdr.checksum = checksum(&env.pck, sizeof(env.pck));
 

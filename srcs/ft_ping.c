@@ -21,7 +21,6 @@ int ft_ping()
 	if (open_socket() == -1)
 		ft_error("Failed to open a socket\n");
 	header_configuration();
-	// pck_send_configuration();
 	signal(SIGALRM, sig_handler);
 	signal(SIGINT, sig_handler);
 	return ping_loop();

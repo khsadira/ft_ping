@@ -4,13 +4,13 @@ int main(int ac, char **av)
 {
 	int 		i;
 
-	env.flags.h = 0;
-	env.flags.v = 0;
-	env.flags.d = 0;
+	env.flags.h = 0; // TO FLAG h
+	env.flags.v = 0; // TO FLAG v
 	env.count = 0; // TO FLAG -c
 	env.interval = 1; // TO FLAG -i
 	env.timeout = 1; // TO FLAG -W
-	env.ttl = 116; // TO FLAG -m
+	env.ttl = 115; // TO FLAG -t
+	env.preload = 1; // TO FLAG -l
 
 	if ((i = fill_flag(ac, av, &(env.flags))) == -1 || !av[i]) {
 		print_usage();

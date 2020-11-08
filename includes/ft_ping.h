@@ -28,36 +28,15 @@
 # define t_timeval		struct timeval
 # define t_ip			struct ip
 # define t_icmp			struct icmp
-# define t_iovec			struct iovec
+# define t_iovec		struct iovec
 # define t_msghdr		struct msghdr
 
 # define RECV_TIMEOUT		1
 # define PACKETSIZE 		64
 # define TRUE				1
 # define FALSE				0
-# define PING_SLEEP_RATE	1000000
 
 typedef unsigned char	t_bool;
-
-// struct icmphdr
-// {
-//   u_int8_t type;		/* message type */
-//   u_int8_t code;		/* type sub-code */
-//   u_int16_t checksum;
-//   union
-//   {
-//     struct
-//     {
-//       u_int16_t	id;
-//       u_int16_t	sequence;
-//     } echo;			/* echo datagram */
-//     u_int32_t	gateway;	/* gateway address */
-//     struct
-//     {
-//       u_int16_t	mtu;
-//     } frag;			/* path mtu discovery */
-//   } un;
-// };
 
 typedef struct	s_packet {
     struct icmphdr	hdr;
@@ -65,7 +44,6 @@ typedef struct	s_packet {
 }				t_packet;
 
 typedef struct	s_flag {
-	int	d;
 	int	h;
 	int	v;
 }				t_flag;
@@ -101,6 +79,7 @@ typedef struct	s_env {
 	int 		timeout;
 	int 		interval;
 	int 		ttl;
+	int			preload;
 
 	double		t_min;
 	double		t_max;
@@ -126,7 +105,6 @@ char			*get_ip(int ac, char **av);
 void			print_usage();
 void 			pck_send_configuration();
 int				ping_loop();
-unsigned short	icmp_checksum(unsigned short *data, int len);
 t_bool			manage_ping_receive(struct timeval tv_start, struct timeval tv_end);
 void			print_resp(int nb_receive, double duration);
 unsigned short	checksum(void *b, int len);
@@ -135,5 +113,7 @@ void			print_stats();
 void			print_timeout();
 void			my_sleep(int time);
 void			free_env();
+// unsigned short	icmp_checksum(unsigned short *data, int len);
+
 
 #endif

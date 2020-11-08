@@ -20,12 +20,13 @@ static int check_flag(char *s, t_flag *flag)
 	i = 1;
 	while (s[i])
 	{
-		if (s[i] == 'h')
-			flag->h = 1;
+		if (s[i] == 'h') {
+			print_usage();
+			free_env();
+			exit(EXIT_SUCCESS);
+		}
 		else if (s[i] == 'v')
 			flag->v = 1;
-		else if (s[i] == 'd')
-			flag->d = 1;
 		else
 			return -1;
 		i++;

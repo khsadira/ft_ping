@@ -3,17 +3,17 @@
 static t_bool	is_finish() {
 	if ((env.seq == env.count && env.count != 0))
 		return (FALSE);
+	if (env.preload - 1 < env.pck_send)
+		my_sleep(env.interval);
 	return (TRUE);
 }
 
 int 			ping_loop()
 {
 	int 		nb_send;
-	t_timeval	tv_start, tv_end; //tv_out
+	t_timeval	tv_start, tv_end;
 
 	print_info();
-
-	int i = 0;
 
 	while (is_finish())
 	{
@@ -27,7 +27,6 @@ int 			ping_loop()
 		alarm(env.timeout);
 		while (manage_ping_receive(tv_start, tv_end))
 			;
-		my_sleep(1);
 	}
 	print_stats();
 	free_env();

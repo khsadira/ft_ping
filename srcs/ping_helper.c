@@ -1,21 +1,6 @@
 #include "ft_ping.h"
 
-unsigned short	icmp_checksum(unsigned short *data, int len) {
-	unsigned long checksum = 0;
-
-	while (len > 1)
-	{
-		checksum = checksum + *data++;
-		len = len - sizeof(unsigned short);
-	}
-	if (len)
-		checksum = checksum + *(unsigned char*)data;
-	checksum = (checksum >> 16) + (checksum & 0xffff);
-	checksum = checksum + (checksum >> 16);
-	return (unsigned short)(~checksum);
-} 
-
-unsigned short checksum(void *b, int len) {
+unsigned short	checksum(void *b, int len) {
     unsigned short *buf = b;
     unsigned int sum = 0;
     unsigned short result;
@@ -31,7 +16,7 @@ unsigned short checksum(void *b, int len) {
     return result;
 }
 
-char *get_dns() {
+char			*get_dns() {
 	t_addrinfo		hints;
 	t_addrinfo		*res;
 	t_sockaddr_in	*sa_in;
@@ -52,28 +37,27 @@ char *get_dns() {
 	return (ip_share);
 }
 
-int		open_socket() {
+int				open_socket() {
 	int hincl = 1;
 
 	ft_memset(&(env.hints), 0, sizeof(env.hints));
 	env.hints.ai_family = AF_INET;
 	env.hints.ai_socktype = SOCK_RAW;
 	env.hints.ai_protocol = IPPROTO_ICMP;
-	if (env.res != NULL ) {
-		free(env.res);
-	}
+
 	if (getaddrinfo(env.host_dst, NULL, &(env.hints), &(env.res)) != 0) {
 		fprintf(stderr, "ping: cannot resolve %s: unknown host.\n", env.host_dst);
 		free_env();
 		exit(EXIT_FAILURE);
 	}
+
 	if ((env.sock_fd = socket(env.res->ai_family, env.res->ai_socktype, env.res->ai_protocol)) < 0)
 		ft_error("Error socket opening\n");
 	return (env.sock_fd);
 }
 
-void	header_configuration() {
-	env.ip = (t_ip *)(env.buf);
+void			header_configuration() {
+	env.ip = (t_ip *)(env.pck.msg);
 	env.icmp = (t_icmp *)(env.ip + 1);
 }
 
@@ -86,7 +70,7 @@ void			add_duration_stats(double duration) {
 	env.t_aggregate_s += duration * duration;
 }
 
-void	my_sleep(int time)
+void			my_sleep(int time)
 {
 	int			interval = 0;
 	t_timeval	tv_start, tv_end;
@@ -95,7 +79,6 @@ void	my_sleep(int time)
 	while (interval < time)
 	{
 		gettimeofday(&tv_end, 0);
-
 		interval = tv_end.tv_sec - tv_start.tv_sec;
 	}
 }

@@ -2,7 +2,7 @@
 
 void	print_usage()
 {
-	printf("ping usage = ...\n");
+	printf("Usage: ft_ping [-v verbose] [-c count] [-i interval] [-t ttl] [-W timeout] destination\n");
 }
 
 void	print_resp(int nb_receive, double duration)

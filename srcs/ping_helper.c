@@ -33,6 +33,8 @@ char			*get_dns() {
 	}
 	sa_in = (t_sockaddr_in *)res->ai_addr;
 	inet_ntop(res->ai_family, &(sa_in->sin_addr), ip_share, INET_ADDRSTRLEN);
+	freeaddrinfo(res);
+
 
 	return (ip_share);
 }
